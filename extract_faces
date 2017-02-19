@@ -20,10 +20,11 @@ def classify_regions(img, classifier):
         gray, scaleFactor=1.3, minNeighbors=5)
 
 def find_faces(img):
-    return classify_regions(img, 'haarcascade_frontalface_default.xml') 
+    return list(classify_regions(img, 'haarcascade/haarcascade_frontalface_default.xml'))\
+           + list(classify_regions(img, 'haarcascade/haarcascade_profileface.xml'))
 
 def find_eyes(img):
-    return classify_regions(img, 'haarcascade_eyes.xml') 
+    return classify_regions(img, 'haarcascade/haarcascade_eye.xml')
 
 
 @click.command()

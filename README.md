@@ -22,7 +22,5 @@ $ ./vid_extract_faces clip.mp4
 ```
 
 It will produce a mess of PNG files in this directory with every face it could detect at each second, like these, produced from [this](http://archive.org/details/KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report):
-![Donald Trump's face][./.docs/KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face04.png "KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face03.png"]
-![Hilary Clinton's face][./.docs/KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face03.png "KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face04.png"]
 
-
+![Hilary Clinton's face](.docs/KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face03.png "KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face03.png") ![Donald Trump's face](.docs/KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face04.png "KQED_20161020_010000_PBS_NewsHour_Debates_2016_A_Special_Report.mp4_874s.png_face04.png")

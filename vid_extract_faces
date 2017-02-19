@@ -1,0 +1,8 @@
+#!/bin/sh
+
+INPUT=$1
+
+ffmpeg -i "${INPUT}" -vf fps=1 "${INPUT}"_%03ds.png
+for frame in $(dirname "${INPUT}")/*.png; do
+  ./extract_faces "$frame"
+done

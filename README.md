@@ -6,13 +6,9 @@ Our immediate goal is to support (i.e. automate as much as possible) the hyperli
 
 ## Developing
 
-First get the dependencies with pip; this should work everywhere
-but this is alpha code so if you find yourself fighting with this
-step please submit fixes.
+For dependency information, see the [wiki page](https://github.com/kousu/dewy/wiki/Dependencies).
 
-```
-pip install -r requirements.txt
-```
+_Command-line utilities are designed for Unix-based systems. This is alpha code so if you find yourself fighting with this step please submit fixes._
 
 To run, you will need some data to play with. We are not committing our corpus to this repo, for copyright and bandwidth pain, so you will need to manually grab some videos with faces and speech in them. The [Trump Archive](http://archive.org/details/trumparchive) is a good place to start; you can also use [`youtube-dl`](https://rg3.github.io/youtube-dl/download.html) to get videos off of [YouTube](https://youtube.com) and [Vimeo](https://vimeo.com).
 

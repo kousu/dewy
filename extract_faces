@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
 Given an image file, find and extract all faces in it to separate .png files
 
 Based on https://github.com/axelbellec/Facial-Recognition/
 """
+from __future__ import print_function
 
 import os
 

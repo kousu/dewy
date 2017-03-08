@@ -1,12 +1,78 @@
-#!/bin/sh
-set -e
+#!/usr/bin/env python
 
-INPUT=$1
-OUTDIR=`echo $INPUT | cut -d '.' -f 1 `
-mkdir -p "${OUTDIR}"
-OUTDIR="${OUTDIR}/"
+from __future__ import print_function
 
-ffmpeg -i "${INPUT}" -vf fps=1 "${OUTDIR}${INPUT}"_%03ds.png
-for frame in $(dirname "${OUTDIR}${INPUT}")/*.png; do
-  ./extract_faces "$frame"
-done
+import sys, os
+from random import choice
+from uuid import uuid4
+
+from extract_faces import *
+
+import cv2_patches as cv2
+
+class FacialRecognizer(object):
+    def __init__(self, training, confidence_threshold=0.3):
+        pass
+    def __call__(self, img):
+        """
+        Returns a label, or None if not recognized
+        """
+        # this is stubbed out for now to just give some mock data
+        # most faces come out unrecognized
+        return choice([None]*18 + ["Applecat", "Lossylee"]) # DEBUG
+        return None
+
+
+@click.command()
+@click.argument('video', type=click.Path(exists=True))
+@click.option('-o', '--output', type=click.Path(exists=False), help="Folder to output to", default=".")
+@click.option('-t', '--training', type=click.Path(exists=True), help="Folder of labelled faces")
+@click.option('--fps', type=float, help="Desired FPS to sample at.", default=None)
+def main(video, output, training, fps):
+    video_fname = video
+    # TODO: reading training data
+    recognize = FacialRecognizer(training)
+
+    # create output
+    output = os.path.join(output, os.path.splitext(os.path.basename(video_fname))[0])
+
+    # read video frames
+    # XXX can this be unrolled into separate shell-scripts? That would make debugging easier.
+    video = cv2.VideoReader(video)
+
+    # FIXME: this floor()s the sample rate, which accumulates drift
+    # this should do something clever involving floating point
+    fps = fps if fps is not None else video.fps
+    sample_every = int(video.fps / fps)
+
+    # construct a filename template that can embed the frame number with as many digits as necessary to cover all the frames
+    frame_template = "%%0%dd" % (len(str(len(video))),)
+    template = "frame%s_face%%02d.png" % (frame_template)
+
+    for i, frame in enumerate(video):
+        if i % sample_every != 0: continue
+
+        ts = i/video.fps * 1000 # timestamp in milliseconds
+        faces = [frame[y:y+h, x:x+w] for (x,y,w,h) in find_faces(frame)]
+        print("Frame %d has %d faces" % (i, len(faces)), file=sys.stderr)
+        for j, face in enumerate(faces, 1):
+            # run the recognizer
+            label = recognize(face)
+            print(label)
+            if label:
+                outfile = os.path.join(output, "recognized", label, template % (i, j) + ".png")
+                # output
+                print("%s\t%f\t%s" % (video_fname, ts, label))
+            else:
+                outfile = os.path.join(output, "unrecognized", template % (i, j) + ".png")
+
+            print(outfile)
+
+            if not os.path.isdir(os.path.dirname(outfile)):
+                os.makedirs(os.path.dirname(outfile))
+            # save image
+            cv2.imwrite(outfile, face)
+
+
+if __name__ == '__main__':
+    main()

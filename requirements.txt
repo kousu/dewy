@@ -1,3 +1,5 @@
 numpy
 internetarchive
 click
+scipy
+sklearn
